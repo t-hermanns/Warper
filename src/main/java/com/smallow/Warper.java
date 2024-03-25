@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
 import net.minecraft.util.ActionResult;
@@ -139,6 +141,7 @@ public class Warper implements ModInitializer {
 			}
 			builder.addSlot(new ItemStack(point.item).setCustomName(point.name),  (index, type, action, gui) -> {
 				player.teleport(point.position.getX()+0.5, point.position.getY(), point.position.getZ()+0.5);
+				player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				((ServerPlayerEntity) player).closeHandledScreen();
 			});
 		}
