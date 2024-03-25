@@ -5,9 +5,12 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +18,14 @@ import java.util.List;
 
 public class Warppoint {
 
+    public final RegistryKey<World> world;
     public final BlockPos position;
     public final Text name;
     public final Item item;
     public final long timestamp;
 
-    public Warppoint(BlockPos position, Text name, Item item) {
+    public Warppoint(RegistryKey<World> world, BlockPos position, Text name, Item item) {
+        this.world = world;
         this.position = position;
         this.name = name;
         this.item = item;
@@ -31,7 +36,8 @@ public class Warppoint {
         return System.currentTimeMillis() / 1000 - this.timestamp < Warper.WAIT_TIME;
     }
 
-    private Warppoint(BlockPos position, Text name, Item item, long timestamp) {
+    private Warppoint(RegistryKey<World> world, BlockPos position, Text name, Item item, long timestamp) {
+        this.world = world;
         this.position = position;
         this.name = name;
         this.item = item;
@@ -42,6 +48,9 @@ public class Warppoint {
         NbtList list = new NbtList();
         for (Warppoint warppoint : warppoints) {
             NbtCompound nbt = new NbtCompound();
+
+            // Serialize world
+            nbt.putString("World", warppoint.world.getValue().toString());
 
             // Serialize position
             nbt.putInt("PosX", warppoint.position.getX());
@@ -69,6 +78,9 @@ public class Warppoint {
         for (NbtElement nbt : warppoints) {
             NbtCompound compound = (NbtCompound) nbt;
 
+            // Deserialize world
+            RegistryKey<World> world = RegistryKey.of(RegistryKeys.WORLD, new Identifier(compound.getString("World")));
+
             // Deserialize position
             BlockPos position = new BlockPos(
                     compound.getInt("PosX"),
@@ -86,7 +98,7 @@ public class Warppoint {
             long timestamp = compound.getLong("Timestamp");
 
             // Add this warppoint to the list
-            list.add(new Warppoint(position, name, item, timestamp));
+            list.add(new Warppoint(world, position, name, item, timestamp));
         }
         return list;
     }

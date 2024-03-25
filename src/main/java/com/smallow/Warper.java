@@ -34,6 +34,8 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+
 public class Warper implements ModInitializer {
 
 	public static final String MOD_ID = "warper";
@@ -140,7 +142,7 @@ public class Warper implements ModInitializer {
 				continue; // TODO: add but grey out
 			}
 			builder.addSlot(new ItemStack(point.item).setCustomName(point.name),  (index, type, action, gui) -> {
-				player.teleport(point.position.getX()+0.5, point.position.getY(), point.position.getZ()+0.5);
+				player.teleport(player.getServer().getWorld(point.world), point.position.getX(), point.position.getY(), point.position.getZ(), Collections.emptySet(), player.getYaw(), player.getPitch());
 				player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				((ServerPlayerEntity) player).closeHandledScreen();
 			});
@@ -178,6 +180,9 @@ public class Warper implements ModInitializer {
 		}
 		// check if any warp point in DISTANCE
 		for (Warppoint warppoint : serverState.warppoints) {
+			if (warppoint.world != sign.getWorld().getRegistryKey()) {
+				continue;
+			}
 			if (warppoint.position.isWithinDistance(sign.getPos(), DISTANCE)) {
 				sign.setText(new SignText().
 						withMessage(0, Text.literal("Warp")).
@@ -203,7 +208,7 @@ public class Warper implements ModInitializer {
 		//clear back text
 		sign.setText(new SignText(), false);
 		sign.setWaxed(true);
-		serverState.warppoints.add(new Warppoint(sign.getPos(), text.getMessage(1, false), item));
+		serverState.warppoints.add(new Warppoint(sign.getWorld().getRegistryKey(), sign.getPos(), text.getMessage(1, false), item));
 		return true;
 	}
 
