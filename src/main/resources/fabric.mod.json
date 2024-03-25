@@ -7,7 +7,7 @@
 	"authors": [
 		"Smallow"
 	],
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"environment": "*",
 	"icon": "assets/warper/icon.png",
 	"entrypoints": {
