@@ -101,6 +101,8 @@ public class Warper implements ModInitializer {
 			}
 			return ActionResult.PASS;
 		});
+
+		LOGGER.info("Warper initialized");
 	}
 
 	private ScreenHandlerType<?> chooseType(StateSaverAndLoader serverState) {
