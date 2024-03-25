@@ -142,7 +142,7 @@ public class Warper implements ModInitializer {
 				continue; // TODO: add but grey out
 			}
 			builder.addSlot(new ItemStack(point.item).setCustomName(point.name),  (index, type, action, gui) -> {
-				player.teleport(player.getServer().getWorld(point.world), point.position.getX(), point.position.getY(), point.position.getZ(), Collections.emptySet(), player.getYaw(), player.getPitch());
+				player.teleport(player.getServer().getWorld(point.world), point.position.getX()+0.5, point.position.getY(), point.position.getZ()+0.5, Collections.emptySet(), player.getYaw(), player.getPitch());
 				player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				((ServerPlayerEntity) player).closeHandledScreen();
 			});
