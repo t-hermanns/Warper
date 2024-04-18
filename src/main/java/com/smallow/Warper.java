@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -133,6 +134,7 @@ public class Warper implements ModInitializer {
 		ScreenHandlerType<?> handlertype = chooseType(serverState);
 		SimpleGuiBuilder builder = new SimpleGuiBuilder(handlertype, false);
 		builder.setTitle(Text.literal("Warp Menu"));
+		updateWarpPoints(player.getServer());
 		// add items from warppoints list except the current one
 		for (Warppoint point : serverState.warppoints) {
 			if (point.position.equals(warppoint.position)) {
@@ -149,6 +151,14 @@ public class Warper implements ModInitializer {
 		}
 		SimpleGui gui = builder.build((ServerPlayerEntity) player);
 		gui.open();
+	}
+
+	private void updateWarpPoints(MinecraftServer server) {
+		StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
+		// remove warppoints if there is no sign at the location
+		serverState.warppoints.removeIf(warppoint ->
+				!(server.getWorld(warppoint.world).getBlockState(warppoint.position).getBlock() instanceof AbstractSignBlock)
+		);
 	}
 
 	public static boolean singChangeCancelled(SignText text, boolean front, SignBlockEntity sign) {
