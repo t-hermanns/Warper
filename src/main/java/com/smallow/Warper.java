@@ -134,7 +134,6 @@ public class Warper implements ModInitializer {
 		ScreenHandlerType<?> handlertype = chooseType(serverState);
 		SimpleGuiBuilder builder = new SimpleGuiBuilder(handlertype, false);
 		builder.setTitle(Text.literal("Warp Menu"));
-		updateWarpPoints(player.getServer());
 		// add items from warppoints list except the current one
 		for (Warppoint point : serverState.warppoints) {
 			if (point.position.equals(warppoint.position)) {
@@ -144,8 +143,13 @@ public class Warper implements ModInitializer {
 				continue; // TODO: add but grey out
 			}
 			builder.addSlot(new ItemStack(point.item).setCustomName(point.name),  (index, type, action, gui) -> {
-				player.teleport(player.getServer().getWorld(point.world), point.position.getX()+0.5, point.position.getY(), point.position.getZ()+0.5, Collections.emptySet(), player.getYaw(), player.getPitch());
-				player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				if (!warpPointExists(player.getServer(), point)) {
+					player.sendMessage(Text.literal("§cSorry, this Warp point does not exist anymore"), false);
+
+				} else {
+					player.teleport(player.getServer().getWorld(point.world), point.position.getX() + 0.5, point.position.getY(), point.position.getZ() + 0.5, Collections.emptySet(), player.getYaw(), player.getPitch());
+					player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				}
 				((ServerPlayerEntity) player).closeHandledScreen();
 			});
 		}
@@ -153,12 +157,12 @@ public class Warper implements ModInitializer {
 		gui.open();
 	}
 
-	private void updateWarpPoints(MinecraftServer server) {
+	private boolean warpPointExists(MinecraftServer server, Warppoint warp) {
 		StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
-		// remove warppoints if there is no sign at the location
-		serverState.warppoints.removeIf(warppoint ->
-				!(server.getWorld(warppoint.world).getBlockState(warppoint.position).getBlock() instanceof AbstractSignBlock)
-		);
+		if (server.getWorld(warp.world).getBlockState(warp.position).getBlock() instanceof AbstractSignBlock)
+			return true;
+		serverState.warppoints.remove(warp);
+		return false;
 	}
 
 	public static boolean singChangeCancelled(SignText text, boolean front, SignBlockEntity sign) {
