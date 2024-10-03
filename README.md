@@ -1,5 +1,10 @@
 # Warper
+![Modrinth Version](https://img.shields.io/modrinth/v/signwarpcreate)
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/signwarpcreate) 
 
+
+
+## About
 Sever-sided Fabric Mod to create simple warp points using signs. 
 Includes a simple Inventory-based Warp GUI.
 
