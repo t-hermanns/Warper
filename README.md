@@ -3,7 +3,7 @@
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/signwarpcreate)
 
 Create warp points with signs and travel between them through an inventory-based warp GUI.
-**Server-side only:** players can join with a vanilla client, and it also works in singleplayer.
+Players can join with a vanilla client, and it also works in singleplayer.
 
 ## How to use
 1. Place a sign on or on top of a block. That block becomes the warp's icon in the GUI.
