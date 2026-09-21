@@ -79,5 +79,5 @@ jobs:
           changelog-file: changelog.md
           loaders: fabric
           game-versions: ${{ steps.info.outputs.minecraft_version }}
-          environment: server | singleplayer
+          environment: server
           dependencies: fabric-api(required){modrinth:P7dR8mSH}
