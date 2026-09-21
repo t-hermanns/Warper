@@ -1,5 +1,5 @@
 # Warper
-![Modrinth Version](https://img.shields.io/modrinth/v/signwarpcreate)
+[![Latest Version](https://img.shields.io/github/v/release/t-hermanns/Warper?label=version)](https://github.com/t-hermanns/Warper/releases/latest)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/signwarpcreate)
 
 Create warp points with signs and travel between them through an inventory-based warp GUI.
