@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
-import net.minecraft.world.level.block.entity.SignTextSlot;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.slf4j.Logger;
@@ -164,22 +163,22 @@ public class Warper implements ModInitializer {
 	}
 
 	private static SignText signText(DyeColor color, Component... lines) {
-		SignText.Mutable text = SignText.EMPTY.asMutable();
+		SignText text = new SignText();
 		for (int i = 0; i < lines.length; i++) {
-			text.setLine(i, lines[i]);
+			text = text.setMessage(i, lines[i]);
 		}
-		return text.asImmutable().withColor(color).withGlowingText(true);
+		return text.setColor(color).setHasGlowingText(true);
 	}
 
 	private static void finishSign(SignBlockEntity sign, SignText front) {
-		sign.setText(front, SignTextSlot.FRONT);
+		sign.setText(front, true);
 		//clear back text
-		sign.setText(SignText.EMPTY, SignTextSlot.BACK);
+		sign.setText(new SignText(), false);
 		sign.setWaxed(true);
 	}
 
 	public static boolean singChangeCancelled(SignText text, boolean front, SignBlockEntity sign) {
-		if (!text.getMessages(false).get(0).getString().trim().equalsIgnoreCase("[warp]") || !front) {
+		if (!text.getMessage(0, false).getString().trim().equalsIgnoreCase("[warp]") || !front) {
 			return false;
 		}
 		Level world = sign.getLevel();
@@ -194,7 +193,7 @@ public class Warper implements ModInitializer {
 					Component.literal("§0warp points")));
 			return true;
 		}
-		String name = text.getMessages(false).get(1).getString().trim();
+		String name = text.getMessage(1, false).getString().trim();
 		if(name.isEmpty()){
 			finishSign(sign, signText(DyeColor.RED,
 					Component.literal("Warp"),
