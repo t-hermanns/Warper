@@ -79,7 +79,7 @@ public class Warppoint {
             NbtCompound compound = (NbtCompound) nbt;
 
             // Deserialize world
-            RegistryKey<World> world = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(compound.getString("World")));
+            RegistryKey<World> world = RegistryKey.of(RegistryKeys.WORLD, new Identifier(compound.getString("World")));
 
             // Deserialize position
             BlockPos position = new BlockPos(
@@ -92,7 +92,7 @@ public class Warppoint {
             Text name = Text.of(compound.getString("Name"));
 
             // Deserialize item by its registry name
-            Item item = Registries.ITEM.get(Identifier.of(compound.getString("Item")));
+            Item item = Registries.ITEM.get(new Identifier(compound.getString("Item")));
 
             // Deserialize timestamp
             long timestamp = compound.getLong("Timestamp");

@@ -2,7 +2,6 @@ package com.smallow;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
@@ -14,12 +13,12 @@ public class StateSaverAndLoader extends PersistentState {
     public List<Warppoint> warppoints = new ArrayList<>();
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+    public NbtCompound writeNbt(NbtCompound nbt) {
         nbt.put("warppoints", Warppoint.writeNbt(warppoints));
         return nbt;
     }
 
-    public static StateSaverAndLoader createFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+    public static StateSaverAndLoader createFromNbt(NbtCompound nbt) {
         StateSaverAndLoader state = new StateSaverAndLoader();
         state.warppoints = Warppoint.readNbt(nbt.getList("warppoints", 10));
         return state;
