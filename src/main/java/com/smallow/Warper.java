@@ -93,7 +93,7 @@ public class Warper implements ModInitializer {
 								(WAIT_TIME - (int) (System.currentTimeMillis() / 1000 - warppoint.timestamp)) / 60,
 								(WAIT_TIME - (int) (System.currentTimeMillis() / 1000 - warppoint.timestamp)) % 60);
 
-						player.sendSystemMessage(Component.literal("Warp point is not yet active, wait " + waitTime + " minutes"));
+						player.displayClientMessage(Component.literal("Warp point is not yet active, wait " + waitTime + " minutes"), false);
 
 						return InteractionResult.SUCCESS;
 					}
@@ -139,7 +139,7 @@ public class Warper implements ModInitializer {
 			}
 			ItemStack icon = new ItemStack(point.item);
 			icon.set(DataComponents.CUSTOM_NAME, point.name);
-			gui.addSlot(icon, () -> {
+			gui.addSlot(icon, (index, type, action, slotGui) -> {
 				ServerLevel targetWorld = server.getLevel(point.world);
 				if (targetWorld == null || !warpPointExists(server, point)) {
 					player.sendSystemMessage(Component.literal("§cSorry, this Warp point does not exist anymore"));
