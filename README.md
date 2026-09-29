@@ -2,6 +2,8 @@
 [![Latest Version](https://img.shields.io/github/v/release/t-hermanns/Warper?label=version)](https://github.com/t-hermanns/Warper/releases/latest)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/signwarpcreate)
 
+[![Available on Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/signwarpcreate)
+
 Create warp points with signs and travel between them through an inventory-based warp GUI.
 Players can join with a vanilla client, and it also works in singleplayer.
 
